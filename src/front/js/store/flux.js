@@ -13,13 +13,39 @@ const getState = ({ getStore, getActions, setStore }) => {
 					background: "white",
 					initial: "white"
 				}
-			]
+			],
+			user:{
+				"email":"",
+				"password":""
+			}
 		},
 		actions: {
-			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
-			},
+			handleOnchange: (event) => {
+                const store = getStore();
+                setStore({
+                    user: {
+                        ...store.user,
+                        [event.target.name]: event.target.value
+                    }
+					
+                });
+				console.log(event.target.name, event.target.value)
+            },
+			handleSubmituser: async () => {
+                const store = getStore()
+                await fetch(process.env.BACKEND_URL, {
+                    method: "POST",
+                    body: JSON.stringify(store.user),
+                    headers: {
+                        "content-type": "application/json"
+                    }
+                })
+                    .then((response) => response.json())
+                    .then((data) => console.log(data))
+                    .catch((error) => console.log(error))
+
+                return true
+            },
 
 			getMessage: async () => {
 				try{
