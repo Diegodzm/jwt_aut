@@ -19,6 +19,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				"password": "",
 			},
 
+
 		},
 		actions: {
 			handleOnchange: (event) => {
@@ -30,8 +31,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 
 				});
-			
-			
+
+
+			},
+			logout: () => {
+				console.log("logout");
+				setStore({ accessToken: "" })
+				setStore({ validation: false })
+
 			},
 			handleSubmituser: () => {
 				const store = getStore()
@@ -47,38 +54,43 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			handleSubmitLogin: () => {
 				const store = getStore()
-				if(!store.accessToken){
-				fetch("https://congenial-funicular-g44x4xpjpxvvf9wq-3001.app.github.dev/login", {
-					method: "POST",
-					body: JSON.stringify(store.user),
-					headers: {
-						"content-type": "application/json"
-					}
-				}).then((response) => response.json())
-					.then((data) => {setStore({ accessToken: data.access_token
-						
-					 }),console.log(data) })
-					.catch((error) => console.log(error))
+				if (!store.accessToken) {
+					fetch("https://congenial-funicular-g44x4xpjpxvvf9wq-3001.app.github.dev/login", {
+						method: "POST",
+						body: JSON.stringify(store.user),
+						headers: {
+							"content-type": "application/json"
+						}
+					}).then((response) => response.json())
+						.then((data) => {
+							setStore({
+								accessToken: data.access_token
+
+							}), console.log(data)
+						})
+						.catch((error) => console.log(error))
 				}
 
 			},
 			getAutvalidation: () => {
 				const store = getStore()
-				if (store.accessToken && typeof store.accessToken==="string") {
+				if (store.accessToken && typeof store.accessToken === "string") {
 					fetch("https://congenial-funicular-g44x4xpjpxvvf9wq-3001.app.github.dev/autvalidation", {
 						method: "GET",
 						headers: {
 							"content-type": "application/json",
-							'Authorization': 'Bearer '+store.accessToken,
+							'Authorization': 'Bearer ' + store.accessToken,
 
 						}
 					}).then((response) => response.json())
-					.then((data) => console.log(data))
-					.catch((error) => console.log(error))
+						.then((data) => console.log(data))
+						.then(setStore({ validation: true }))
+						.catch((error) => console.log(error))
+
 				}
-				else{
+				else {
 					alert("falta accesstoken")
-					console.log("sin access token")
+					setStore({ validation: false })
 				}
 
 			},
