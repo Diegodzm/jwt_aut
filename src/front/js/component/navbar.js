@@ -7,7 +7,7 @@ export const Navbar = () => {
 		<nav className="navbar navbar-light bg-light">
 			<div className="btn btn-success" onClick={()=>{navigate("/registro")}}>registro</div>
 			<div className="btn btn-success" onClick={()=>{navigate("/")}}>ingreso</div>
-			<div className="btn btn-success">vista protegida</div>
+			<div className="btn btn-success"onClick={()=>{navigate("/vistaprotegida")}}>vista protegida</div>
 
 		</nav>
 	);
